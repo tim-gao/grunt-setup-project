@@ -3,6 +3,10 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    clean: {
+      js: ['build/src/*.js', '!build/src/*.vendor.js'],
+      css: ['build/src/*.css']
+    },
     jshint: {
       options: {
         curly: true,
@@ -56,16 +60,28 @@ module.exports = function (grunt) {
         //指定压缩任务后目标文件
         dest: 'build/src/<%= pkg.name %>.min.js'
       },
+    },
+    watch: {
+      sass: {
+        files: ['sass/**.scss'],
+        tasks: ['sass'],
+      },
+      js : {
+        files: ['src/**/*.js'],
+        tasks: ['jshint'],
+      },
     }
   });
 
   // 加载包含的插件。
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // 默认被执行的任务列表。
-  grunt.registerTask('default', ['jshint','concat','uglify','sass']);
+  grunt.registerTask('default', ['clean','jshint','concat','uglify','sass']);
 
 };
