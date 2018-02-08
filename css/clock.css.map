@@ -1,7 +1,7 @@
 {
 "version": 3,
 "mappings": "AAAA,IAAK;EACH,UAAU,EAAE,MAAM;;;AAGpB,MAAO;EACL,SAAS,EAAE,GAAG;EACd,KAAK,ECJS,OAAO",
-"sources": ["../../sass/_base.scss","../../sass/_variables.scss"],
+"sources": ["../sass/_base.scss","../sass/_variables.scss"],
 "names": [],
 "file": "clock.css"
 }

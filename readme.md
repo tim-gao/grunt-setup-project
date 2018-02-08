@@ -99,6 +99,79 @@
 
     };
 
+
+ 由于我们使用了requirejs来加载js, 为了让整体架构更加合理，加入了requirejs插件。由于requirejs插件本身可以完成合并和压缩功能，所以我们可以去掉一些不必要的插件。经过重构，最终的配置如下：
+
+    module.exports = function (grunt) {
+
+      // Project configuration.
+      grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        clean: {
+          css: ['css/*.css']
+        },
+        jshint: {
+          options: {
+            curly: true,
+            eqeqeq: true,
+            eqnull: true,
+            browser: true,
+            globals: {
+              jQuery: true
+            },
+          },
+          files: {
+            //定义要检查的文件
+            src: ['gruntfile.js', 'src/**/*.js']
+          },
+        },
+        sass: {
+          dist: {
+            options: {
+              style: 'expanded'
+            },
+            files: {
+              'css/clock.css':'sass/clock.scss'
+            }
+          }
+        },
+        watch: {
+          sass: {
+            files: ['sass/**.scss'],
+            tasks: ['sass'],
+          },
+          js : {
+            files: ['src/**/*.js'],
+            tasks: ['jshint'],
+          },
+        },
+        requirejs: {
+          compile: {
+            options: {
+              baseUrl: './',
+              mainConfigFile: 'config.js',
+              name: 'config', /* assumes a production build using almond, if you don't use almond, you
+                                    need to set the "includes" or "modules" option instead of name */
+              include: ['main.js'],
+              optimize: 'uglify',
+              out: 'all.min.js'
+            }
+          }
+        }
+      });
+
+      // 加载包含的插件。
+      grunt.loadNpmTasks('grunt-contrib-clean');
+      grunt.loadNpmTasks('grunt-contrib-jshint');
+      grunt.loadNpmTasks('grunt-contrib-sass');
+      grunt.loadNpmTasks('grunt-contrib-watch');
+      grunt.loadNpmTasks('grunt-contrib-requirejs');
+
+      // 默认被执行的任务列表。
+      grunt.registerTask('default', ['clean', 'jshint', 'sass','requirejs']);
+
+    };
+
 作者：timgao
 
 license：ISC
